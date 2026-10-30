@@ -100,7 +100,20 @@ export default function Footer() {
 
       <div className="border-t border-warm-white/10 py-6">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 text-xs text-warm-white/60 sm:flex-row lg:px-10">
-          <p>© {year} AURA Bienes Raíces. Todos los derechos reservados.</p>
+          <div className="text-center sm:text-left">
+            <p>© {year} AURA Bienes Raíces. Todos los derechos reservados.</p>
+            <p className="mt-1">
+              Desarrollado por{" "}
+              <a
+                href="https://www.softivastudio.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-gold hover:underline"
+              >
+                Softiva Studio
+              </a>
+            </p>
+          </div>
           <div className="flex gap-5">
             <Link href="/legal/privacidad" className="hover:text-gold">
               Política de Privacidad
