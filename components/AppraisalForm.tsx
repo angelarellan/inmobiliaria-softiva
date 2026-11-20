@@ -2,29 +2,54 @@
 
 import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2, MessageCircle } from "lucide-react";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
+import Honeypot from "./Honeypot";
 
 type Status = "idle" | "loading" | "success" | "error";
 
+function followUpMessage(data: Record<string, string>) {
+  const lines = [
+    `Hola AURA Bienes Raíces, soy ${data.name}. Les pedí una tasación desde la web:`,
+    `• Propiedad: ${data.propertyType}`,
+    `• Dirección: ${data.address}`,
+  ];
+  if (data.area) lines.push(`• Superficie: ${data.area} m²`);
+  return lines.join("\n");
+}
+
 export default function AppraisalForm() {
   const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState<string | null>(null);
+  const [whatsappText, setWhatsappText] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<
+      string,
+      string
+    >;
 
     setStatus("loading");
+    setError(null);
     try {
       const res = await fetch("/api/appraisal", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error("request failed");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        setError(body.error ?? "Ocurrió un error al enviar el formulario. Probá nuevamente.");
+        setStatus("error");
+        return;
+      }
+      setWhatsappText(followUpMessage(data));
       setStatus("success");
       form.reset();
     } catch {
+      setError("Ocurrió un error de conexión. Probá nuevamente.");
       setStatus("error");
     }
   };
@@ -51,8 +76,9 @@ export default function AppraisalForm() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5 }}
           onSubmit={handleSubmit}
-          className="mt-12 grid grid-cols-1 gap-5 rounded-2xl bg-white p-6 shadow-lg shadow-emerald/5 ring-1 ring-slate/5 sm:grid-cols-2 sm:p-10"
+          className="relative mt-12 grid grid-cols-1 gap-5 rounded-2xl bg-white p-6 shadow-lg shadow-emerald/5 ring-1 ring-slate/5 sm:grid-cols-2 sm:p-10"
         >
+          <Honeypot />
           <div className="flex flex-col gap-1.5">
             <label htmlFor="name" className="text-sm font-medium text-slate">
               Nombre completo
@@ -61,6 +87,8 @@ export default function AppraisalForm() {
               required
               id="name"
               name="name"
+              autoComplete="name"
+              maxLength={120}
               type="text"
               placeholder="Tu nombre"
               className="rounded-lg border border-slate/15 px-4 py-3 text-sm focus:border-gold focus:outline-none"
@@ -75,6 +103,8 @@ export default function AppraisalForm() {
               required
               id="phone"
               name="phone"
+              autoComplete="tel"
+              maxLength={40}
               type="tel"
               placeholder="+54 9 11 0000-0000"
               className="rounded-lg border border-slate/15 px-4 py-3 text-sm focus:border-gold focus:outline-none"
@@ -89,6 +119,8 @@ export default function AppraisalForm() {
               required
               id="email"
               name="email"
+              autoComplete="email"
+              maxLength={200}
               type="email"
               placeholder="tu@email.com"
               className="rounded-lg border border-slate/15 px-4 py-3 text-sm focus:border-gold focus:outline-none"
@@ -124,6 +156,7 @@ export default function AppraisalForm() {
               required
               id="address"
               name="address"
+              maxLength={200}
               type="text"
               placeholder="Calle, número, barrio"
               className="rounded-lg border border-slate/15 px-4 py-3 text-sm focus:border-gold focus:outline-none"
@@ -138,6 +171,8 @@ export default function AppraisalForm() {
               required
               id="area"
               name="area"
+              inputMode="numeric"
+              maxLength={40}
               type="text"
               placeholder="Ej: 150"
               className="rounded-lg border border-slate/15 px-4 py-3 text-sm focus:border-gold focus:outline-none"
@@ -152,6 +187,7 @@ export default function AppraisalForm() {
               id="comments"
               name="comments"
               rows={4}
+              maxLength={3000}
               placeholder="Contanos más sobre tu propiedad..."
               className="resize-none rounded-lg border border-slate/15 px-4 py-3 text-sm focus:border-gold focus:outline-none"
             />
@@ -168,14 +204,27 @@ export default function AppraisalForm() {
             </button>
 
             {status === "success" && (
-              <p className="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-emerald">
-                <CheckCircle2 size={18} />
-                ¡Gracias! Recibimos tu solicitud, te contactaremos a la brevedad.
-              </p>
+              <div className="mt-4 rounded-xl bg-emerald/5 p-4 text-center" role="status">
+                <p className="flex items-center justify-center gap-2 text-sm font-medium text-emerald">
+                  <CheckCircle2 size={18} />
+                  ¡Gracias! Recibimos tu solicitud, te contactaremos a la brevedad.
+                </p>
+                {whatsappText && (
+                  <a
+                    href={buildWhatsAppLink(whatsappText)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
+                  >
+                    <MessageCircle size={18} />
+                    Seguir por WhatsApp
+                  </a>
+                )}
+              </div>
             )}
             {status === "error" && (
-              <p className="mt-4 text-center text-sm font-medium text-red-600">
-                Ocurrió un error al enviar el formulario. Probá nuevamente.
+              <p className="mt-4 text-center text-sm font-medium text-red-600" role="alert">
+                {error}
               </p>
             )}
           </div>

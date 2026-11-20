@@ -1,17 +1,22 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { properties } from "@/lib/properties";
 import { Property, SearchFilters } from "@/lib/types";
 import PropertySearch from "./PropertySearch";
 import PropertyCard from "./PropertyCard";
 import PropertyModal from "./PropertyModal";
 
 interface Props {
+  properties: Property[];
+  neighborhoods: string[];
   initialFilters: SearchFilters;
 }
 
-export default function FeaturedProperties({ initialFilters }: Props) {
+export default function FeaturedProperties({
+  properties,
+  neighborhoods,
+  initialFilters,
+}: Props) {
   const [filters, setFilters] = useState<SearchFilters>(initialFilters);
   const [selected, setSelected] = useState<Property | null>(null);
 
@@ -26,10 +31,10 @@ export default function FeaturedProperties({ initialFilters }: Props) {
         return false;
       return true;
     });
-  }, [filters]);
+  }, [filters, properties]);
 
   return (
-    <section id="propiedades" className="bg-warm-white py-24">
+    <section id="propiedades" className="scroll-mt-24 bg-warm-white py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
@@ -45,10 +50,19 @@ export default function FeaturedProperties({ initialFilters }: Props) {
         </div>
 
         <div className="mt-10">
-          <PropertySearch filters={filters} onChange={setFilters} />
+          <PropertySearch
+            filters={filters}
+            onChange={setFilters}
+            neighborhoods={neighborhoods}
+          />
         </div>
 
-        {filtered.length === 0 ? (
+        {properties.length === 0 ? (
+          <p className="mt-16 text-center text-slate/60">
+            En este momento no hay propiedades publicadas. Volvé a mirar en un
+            rato.
+          </p>
+        ) : filtered.length === 0 ? (
           <p className="mt-16 text-center text-slate/60">
             No encontramos propiedades con esos filtros. Probá ajustando la
             búsqueda.
@@ -60,7 +74,7 @@ export default function FeaturedProperties({ initialFilters }: Props) {
                 key={property.id}
                 property={property}
                 index={index}
-                onSelect={setSelected}
+                onQuickView={setSelected}
               />
             ))}
           </div>

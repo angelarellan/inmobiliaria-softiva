@@ -1,33 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addContact } from "@/lib/store";
+import { insertContact } from "@/lib/data/leads";
+import { isSpam, parseContact } from "@/lib/validation";
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
+  if (!body || typeof body !== "object") {
+    return NextResponse.json({ error: "Datos inválidos." }, { status: 400 });
+  }
 
-  if (
-    !body ||
-    typeof body.name !== "string" ||
-    typeof body.email !== "string" ||
-    typeof body.message !== "string" ||
-    !body.name.trim() ||
-    !body.email.trim() ||
-    !body.message.trim()
-  ) {
+  // Si completaron el campo trampa, respondemos OK pero no guardamos nada.
+  if (isSpam(body)) return NextResponse.json({ ok: true }, { status: 201 });
+
+  const parsed = parseContact(body);
+  if (!parsed.ok) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
+  }
+
+  try {
+    await insertContact(parsed.data);
+  } catch (error) {
+    console.error("No se pudo guardar la consulta:", error);
     return NextResponse.json(
-      { error: "Faltan datos requeridos." },
-      { status: 400 }
+      { error: "No pudimos guardar tu consulta. Probá de nuevo en un rato." },
+      { status: 500 }
     );
   }
 
-  const entry = addContact({
-    name: body.name.trim(),
-    email: body.email.trim(),
-    phone: typeof body.phone === "string" ? body.phone.trim() : "",
-    message: body.message.trim(),
-    propertyId: typeof body.propertyId === "string" ? body.propertyId : undefined,
-    propertyTitle:
-      typeof body.propertyTitle === "string" ? body.propertyTitle : undefined,
-  });
-
-  return NextResponse.json({ ok: true, id: entry.id }, { status: 201 });
+  return NextResponse.json({ ok: true }, { status: 201 });
 }

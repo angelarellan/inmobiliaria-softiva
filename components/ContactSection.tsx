@@ -2,29 +2,56 @@
 
 import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Loader2, Mail, MapPin, Phone } from "lucide-react";
+import {
+  CheckCircle2,
+  Loader2,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+} from "lucide-react";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
+import Honeypot from "./Honeypot";
 
 type Status = "idle" | "loading" | "success" | "error";
 
+function followUpMessage(name: string, message: string) {
+  const short = message.length > 500 ? `${message.slice(0, 497)}…` : message;
+  return `Hola AURA Bienes Raíces, soy ${name}. Les acabo de dejar una consulta en la web:\n"${short}"`;
+}
+
 export default function ContactSection() {
   const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState<string | null>(null);
+  const [whatsappText, setWhatsappText] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<
+      string,
+      string
+    >;
 
     setStatus("loading");
+    setError(null);
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error("request failed");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        setError(body.error ?? "Ocurrió un error al enviar el mensaje. Probá nuevamente.");
+        setStatus("error");
+        return;
+      }
+      setWhatsappText(followUpMessage(data.name ?? "", data.message ?? ""));
       setStatus("success");
       form.reset();
     } catch {
+      setError("Ocurrió un error de conexión. Probá nuevamente.");
       setStatus("error");
     }
   };
@@ -74,8 +101,9 @@ export default function ContactSection() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6, delay: 0.1 }}
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 rounded-2xl bg-warm-white p-6 shadow-lg shadow-emerald/5 ring-1 ring-slate/5 sm:p-8"
+          className="relative flex flex-col gap-4 rounded-2xl bg-warm-white p-6 shadow-lg shadow-emerald/5 ring-1 ring-slate/5 sm:p-8"
         >
+          <Honeypot />
           <div className="flex flex-col gap-1.5">
             <label htmlFor="c-name" className="text-sm font-medium text-slate">
               Nombre
@@ -85,6 +113,8 @@ export default function ContactSection() {
               id="c-name"
               name="name"
               type="text"
+              autoComplete="name"
+              maxLength={120}
               className="rounded-lg border border-slate/15 bg-white px-4 py-3 text-sm focus:border-gold focus:outline-none"
             />
           </div>
@@ -97,6 +127,8 @@ export default function ContactSection() {
               id="c-email"
               name="email"
               type="email"
+              autoComplete="email"
+              maxLength={200}
               className="rounded-lg border border-slate/15 bg-white px-4 py-3 text-sm focus:border-gold focus:outline-none"
             />
           </div>
@@ -108,6 +140,8 @@ export default function ContactSection() {
               id="c-phone"
               name="phone"
               type="tel"
+              autoComplete="tel"
+              maxLength={40}
               className="rounded-lg border border-slate/15 bg-white px-4 py-3 text-sm focus:border-gold focus:outline-none"
             />
           </div>
@@ -120,6 +154,7 @@ export default function ContactSection() {
               id="c-message"
               name="message"
               rows={4}
+              maxLength={3000}
               className="resize-none rounded-lg border border-slate/15 bg-white px-4 py-3 text-sm focus:border-gold focus:outline-none"
             />
           </div>
@@ -134,14 +169,27 @@ export default function ContactSection() {
           </button>
 
           {status === "success" && (
-            <p className="flex items-center justify-center gap-2 text-sm font-medium text-emerald">
-              <CheckCircle2 size={18} />
-              ¡Mensaje enviado! Te responderemos a la brevedad.
-            </p>
+            <div className="rounded-xl bg-emerald/5 p-4 text-center" role="status">
+              <p className="flex items-center justify-center gap-2 text-sm font-medium text-emerald">
+                <CheckCircle2 size={18} />
+                ¡Mensaje enviado! Te responderemos a la brevedad.
+              </p>
+              {whatsappText && (
+                <a
+                  href={buildWhatsAppLink(whatsappText)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
+                >
+                  <MessageCircle size={18} />
+                  Seguir por WhatsApp
+                </a>
+              )}
+            </div>
           )}
           {status === "error" && (
-            <p className="text-center text-sm font-medium text-red-600">
-              Ocurrió un error al enviar el mensaje. Probá nuevamente.
+            <p className="text-center text-sm font-medium text-red-600" role="alert">
+              {error}
             </p>
           )}
         </motion.form>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { ADMIN_COOKIE, ADMIN_COOKIE_VALUE } from "@/lib/admin-auth";
+import { getSession } from "@/lib/auth/session";
 import LoginForm from "@/components/admin/LoginForm";
 
 export const metadata: Metadata = {
@@ -10,11 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminLoginPage() {
-  const cookieStore = await cookies();
-  const isAuthenticated =
-    cookieStore.get(ADMIN_COOKIE)?.value === ADMIN_COOKIE_VALUE;
-
-  if (isAuthenticated) {
+  if (await getSession()) {
     redirect("/admin/dashboard");
   }
 

@@ -1,36 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addAppraisal } from "@/lib/store";
+import { insertAppraisal } from "@/lib/data/leads";
+import { isSpam, parseAppraisal } from "@/lib/validation";
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
+  if (!body || typeof body !== "object") {
+    return NextResponse.json({ error: "Datos inválidos." }, { status: 400 });
+  }
 
-  if (
-    !body ||
-    typeof body.name !== "string" ||
-    typeof body.email !== "string" ||
-    typeof body.phone !== "string" ||
-    typeof body.address !== "string" ||
-    !body.name.trim() ||
-    !body.email.trim() ||
-    !body.phone.trim() ||
-    !body.address.trim()
-  ) {
+  // Si completaron el campo trampa, respondemos OK pero no guardamos nada.
+  if (isSpam(body)) return NextResponse.json({ ok: true }, { status: 201 });
+
+  const parsed = parseAppraisal(body);
+  if (!parsed.ok) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
+  }
+
+  try {
+    await insertAppraisal(parsed.data);
+  } catch (error) {
+    console.error("No se pudo guardar la tasación:", error);
     return NextResponse.json(
-      { error: "Faltan datos requeridos." },
-      { status: 400 }
+      { error: "No pudimos guardar tu solicitud. Probá de nuevo en un rato." },
+      { status: 500 }
     );
   }
 
-  const entry = addAppraisal({
-    name: body.name.trim(),
-    email: body.email.trim(),
-    phone: body.phone.trim(),
-    propertyType:
-      typeof body.propertyType === "string" ? body.propertyType : "Casa",
-    address: body.address.trim(),
-    area: typeof body.area === "string" ? body.area.trim() : "",
-    comments: typeof body.comments === "string" ? body.comments.trim() : "",
-  });
-
-  return NextResponse.json({ ok: true, id: entry.id }, { status: 201 });
+  return NextResponse.json({ ok: true }, { status: 201 });
 }

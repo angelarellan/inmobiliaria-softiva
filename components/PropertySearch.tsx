@@ -1,7 +1,6 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { neighborhoods } from "@/lib/properties";
 import { OperationType, PropertyType, SearchFilters } from "@/lib/types";
 
 const operations: (OperationType | "Todas")[] = ["Todas", "Venta", "Alquiler"];
@@ -25,6 +24,7 @@ interface Props {
   filters: SearchFilters;
   onChange: (filters: SearchFilters) => void;
   onSubmit?: () => void;
+  neighborhoods: string[];
   variant?: "hero" | "inline";
 }
 
@@ -32,6 +32,7 @@ export default function PropertySearch({
   filters,
   onChange,
   onSubmit,
+  neighborhoods,
   variant = "inline",
 }: Props) {
   const containerClasses =
@@ -43,6 +44,7 @@ export default function PropertySearch({
     <div className={`rounded-2xl p-4 sm:p-5 ${containerClasses}`}>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <select
+          aria-label="Operación"
           value={filters.operation}
           onChange={(e) =>
             onChange({
@@ -60,6 +62,7 @@ export default function PropertySearch({
         </select>
 
         <select
+          aria-label="Tipo de propiedad"
           value={filters.type}
           onChange={(e) =>
             onChange({ ...filters, type: e.target.value as PropertyType | "Todos" })
@@ -74,6 +77,7 @@ export default function PropertySearch({
         </select>
 
         <select
+          aria-label="Ubicación"
           value={filters.neighborhood}
           onChange={(e) =>
             onChange({ ...filters, neighborhood: e.target.value })
@@ -89,6 +93,7 @@ export default function PropertySearch({
         </select>
 
         <select
+          aria-label="Precio máximo"
           value={filters.maxPrice ?? ""}
           onChange={(e) =>
             onChange({

@@ -13,7 +13,13 @@ const defaultFilters: SearchFilters = {
   maxPrice: null,
 };
 
-export default function Hero() {
+interface Props {
+  neighborhoods: string[];
+  /** Deja lugar para la barra "Web modelo" arriba del navbar. */
+  withDemoBar?: boolean;
+}
+
+export default function Hero({ neighborhoods, withDemoBar = true }: Props) {
   const router = useRouter();
   const [filters, setFilters] = useState<SearchFilters>(defaultFilters);
 
@@ -33,7 +39,9 @@ export default function Hero() {
   return (
     <section
       id="inicio"
-      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-emerald pt-24"
+      className={`relative flex min-h-screen items-center justify-center overflow-hidden bg-emerald pb-12 ${
+        withDemoBar ? "pt-36 sm:pt-32" : "pt-24"
+      }`}
     >
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -85,6 +93,7 @@ export default function Hero() {
             filters={filters}
             onChange={setFilters}
             onSubmit={handleSearch}
+            neighborhoods={neighborhoods}
             variant="hero"
           />
         </motion.div>

@@ -1,8 +1,10 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Lock, User, Loader2, AlertCircle } from "lucide-react";
+import { Lock, User, Loader2, AlertCircle, ArrowLeft, MessageCircle } from "lucide-react";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -40,7 +42,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-emerald px-6">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-emerald px-5 py-10">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
         <div className="text-center">
           <span className="font-serif-display text-3xl text-emerald">AURA</span>
@@ -62,8 +64,8 @@ export default function LoginForm() {
                 name="username"
                 type="text"
                 autoComplete="username"
-                placeholder="admin"
-                className="w-full text-sm focus:outline-none"
+                placeholder="Tu usuario"
+                className="w-full text-base focus:outline-none sm:text-sm"
               />
             </div>
           </div>
@@ -81,7 +83,7 @@ export default function LoginForm() {
                 type="password"
                 autoComplete="current-password"
                 placeholder="••••••"
-                className="w-full text-sm focus:outline-none"
+                className="w-full text-base focus:outline-none sm:text-sm"
               />
             </div>
           </div>
@@ -102,11 +104,28 @@ export default function LoginForm() {
             {loading ? "Ingresando..." : "Ingresar"}
           </button>
 
-          <p className="text-center text-xs text-slate/40">
-            Usuario: admin · Contraseña: admin
-          </p>
         </form>
+
+        <a
+          href={buildWhatsAppLink(
+            "Hola Softiva, quiero probar el panel de la web modelo de inmobiliaria. ¿Me pasan el acceso demo?"
+          )}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-warm-white px-4 py-3 text-center text-xs text-slate/70 ring-1 ring-slate/10 transition-colors hover:text-emerald"
+        >
+          <MessageCircle size={16} className="shrink-0 text-[#25D366]" />
+          ¿Querés probar el panel? Pedinos el acceso demo por WhatsApp
+        </a>
       </div>
+
+      <Link
+        href="/"
+        className="mt-6 flex items-center gap-1.5 text-sm text-warm-white/70 hover:text-gold"
+      >
+        <ArrowLeft size={16} />
+        Volver a la web
+      </Link>
     </div>
   );
 }

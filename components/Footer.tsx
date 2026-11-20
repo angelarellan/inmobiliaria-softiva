@@ -50,12 +50,12 @@ export default function Footer() {
             Navegación
           </h3>
           <ul className="mt-4 space-y-2.5 text-sm text-warm-white/75">
-            <li><a href="#inicio" className="hover:text-gold">Inicio</a></li>
-            <li><a href="#propiedades" className="hover:text-gold">Propiedades</a></li>
-            <li><a href="#nosotros" className="hover:text-gold">Nosotros</a></li>
-            <li><a href="#servicios" className="hover:text-gold">Servicios</a></li>
-            <li><a href="#tasaciones" className="hover:text-gold">Tasaciones</a></li>
-            <li><a href="#contacto" className="hover:text-gold">Contacto</a></li>
+            <li><Link href="/#inicio" className="hover:text-gold">Inicio</Link></li>
+            <li><Link href="/#propiedades" className="hover:text-gold">Propiedades</Link></li>
+            <li><Link href="/#nosotros" className="hover:text-gold">Nosotros</Link></li>
+            <li><Link href="/#servicios" className="hover:text-gold">Servicios</Link></li>
+            <li><Link href="/#tasaciones" className="hover:text-gold">Tasaciones</Link></li>
+            <li><Link href="/#contacto" className="hover:text-gold">Contacto</Link></li>
           </ul>
         </div>
 

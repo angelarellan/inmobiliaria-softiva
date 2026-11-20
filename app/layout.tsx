@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,7 +16,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.aurabienesraices.com.ar"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "AURA Bienes Raíces — Gestión Inmobiliaria Integral",
     template: "%s | AURA Bienes Raíces",
@@ -35,6 +36,19 @@ export const metadata: Metadata = {
       "Compra, venta, alquiler y tasación de propiedades premium en Buenos Aires.",
     locale: "es_AR",
     type: "website",
+    siteName: "AURA Bienes Raíces",
+    url: "/",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?fm=jpg&fit=crop&w=1200&h=630&q=75",
+        width: 1200,
+        height: 630,
+        alt: "AURA Bienes Raíces",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 };
 

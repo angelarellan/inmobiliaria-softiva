@@ -9,6 +9,26 @@ export type PropertyType =
 
 export type Currency = "USD" | "ARS";
 
+export type PropertyStatus = "publicada" | "pausada" | "vendida" | "alquilada";
+
+export type PropertyOrigin = "seed" | "demo" | "owner";
+
+export const OPERATIONS: OperationType[] = ["Venta", "Alquiler"];
+export const PROPERTY_TYPES: PropertyType[] = [
+  "Casa",
+  "Departamento",
+  "Penthouse",
+  "Oficina",
+  "Terreno",
+];
+export const CURRENCIES: Currency[] = ["USD", "ARS"];
+export const PROPERTY_STATUSES: PropertyStatus[] = [
+  "publicada",
+  "pausada",
+  "vendida",
+  "alquilada",
+];
+
 export interface Property {
   id: string;
   slug: string;
@@ -30,7 +50,30 @@ export interface Property {
   description: string;
   amenities: string[];
   featured: boolean;
+  status: PropertyStatus;
+  position: number;
+  isSeed: boolean;
+  createdBy: PropertyOrigin;
+  createdAt: string;
+  updatedAt: string;
 }
+
+/** Lo mínimo que necesita el asistente de visitas para mostrar una propiedad. */
+export interface PropertySummary {
+  id: string;
+  slug: string;
+  title: string;
+  operation: OperationType;
+  type: PropertyType;
+  currency: Currency;
+  price: number;
+  priceSuffix?: string;
+  neighborhood: string;
+  image: string | null;
+}
+
+export type LeadStatus = "nuevo" | "contactado" | "cerrado";
+export const LEAD_STATUSES: LeadStatus[] = ["nuevo", "contactado", "cerrado"];
 
 export interface ContactSubmission {
   id: string;
@@ -40,6 +83,7 @@ export interface ContactSubmission {
   message: string;
   propertyId?: string;
   propertyTitle?: string;
+  status: LeadStatus;
   createdAt: string;
 }
 
@@ -48,10 +92,27 @@ export interface AppraisalSubmission {
   name: string;
   email: string;
   phone: string;
-  propertyType: PropertyType | string;
+  propertyType: string;
   address: string;
   area: string;
-  comments?: string;
+  comments: string;
+  status: LeadStatus;
+  createdAt: string;
+}
+
+export interface VisitRequest {
+  id: string;
+  propertyId?: string;
+  propertyTitle: string;
+  propertySlug?: string;
+  visitDate: string;
+  timeSlot: string;
+  name: string;
+  phone: string;
+  operation?: string;
+  zone?: string;
+  budget?: string;
+  status: LeadStatus;
   createdAt: string;
 }
 
@@ -61,3 +122,5 @@ export interface SearchFilters {
   neighborhood: string;
   maxPrice: number | null;
 }
+
+export type AdminRole = "demo" | "owner";
