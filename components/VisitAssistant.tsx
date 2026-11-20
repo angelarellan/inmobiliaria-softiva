@@ -14,11 +14,11 @@ import {
   CalendarCheck,
   CheckCircle2,
   Loader2,
-  MessageCircle,
   RotateCcw,
   Send,
   X,
 } from "lucide-react";
+import { WhatsAppIcon } from "./SocialIcons";
 import type { OperationType, PropertySummary } from "@/lib/types";
 import { formatPropertyPrice, formatVisitDate } from "@/lib/format";
 import { propertyPath, propertyUrl } from "@/lib/site";
@@ -633,7 +633,7 @@ export default function VisitAssistant() {
                     rel="noopener noreferrer"
                     className={`${optionClass()} border-[#25D366] text-[#128C4B]`}
                   >
-                    <MessageCircle size={16} />
+                    <WhatsAppIcon size={16} />
                     Escribir por WhatsApp
                   </a>
                   <Option subtle onClick={() => void start()}>
@@ -730,7 +730,7 @@ export default function VisitAssistant() {
                     rel="noopener noreferrer"
                     className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
                   >
-                    <MessageCircle size={18} />
+                    <WhatsAppIcon size={18} />
                     Enviar por WhatsApp
                   </a>
                   <Option subtle onClick={() => setOpen(false)}>
@@ -749,7 +749,7 @@ export default function VisitAssistant() {
                     className={`${optionClass()} border-[#25D366] text-[#128C4B]`}
                     title={errorText ?? undefined}
                   >
-                    <MessageCircle size={16} />
+                    <WhatsAppIcon size={16} />
                     Escribir por WhatsApp
                   </a>
                 </Options>

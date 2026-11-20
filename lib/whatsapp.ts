@@ -50,6 +50,3 @@ export function buildWhatsAppLinkTo(phone: string, message: string) {
   if (!number) return null;
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
-
-export const SOFTIVA_DEMO_MESSAGE =
-  "Hola Softiva, vi la web modelo de inmobiliaria y quiero una para mi inmobiliaria";

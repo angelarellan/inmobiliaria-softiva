@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import CountUp from "./CountUp";
 
 const testimonials = [
   {
@@ -46,7 +47,7 @@ export default function Testimonials() {
               className="text-center"
             >
               <p className="font-serif-display text-3xl text-emerald sm:text-4xl">
-                {metric.value}
+                <CountUp value={metric.value} />
               </p>
               <p className="mt-1 text-xs uppercase tracking-wide text-slate/60">
                 {metric.label}

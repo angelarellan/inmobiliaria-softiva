@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Award, Users, Building2 } from "lucide-react";
+import CountUp from "./CountUp";
 
 const stats = [
   { icon: Award, label: "Años de trayectoria", value: "+10" },
@@ -61,7 +62,7 @@ export default function About() {
               <div key={stat.label} className="text-center sm:text-left">
                 <stat.icon className="mx-auto mb-2 text-emerald sm:mx-0" size={22} />
                 <p className="font-serif-display text-2xl text-emerald">
-                  {stat.value}
+                  <CountUp value={stat.value} />
                 </p>
                 <p className="text-xs uppercase tracking-wide text-slate/60">
                   {stat.label}

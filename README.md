@@ -1,6 +1,6 @@
 # AURA Bienes Raíces — Web modelo de Softiva Studio
 
-Web modelo de inmobiliaria que Softiva Studio usa para mostrar a inmobiliarias. Incluye la web pública, una ficha con URL propia por propiedad, un asistente para agendar visitas y un panel de administración con usuario demo.
+Web modelo de inmobiliaria que Softiva Studio usa para mostrar a inmobiliarias (el crédito "Desarrollado por Softiva Studio" está en el footer). Incluye la web pública, una ficha con URL propia por propiedad, un asistente para agendar visitas y un panel de administración con usuario demo.
 
 ## Stack
 
@@ -28,7 +28,6 @@ Ver `.env.example`. La `SUPABASE_SECRET_KEY` solo se usa en el servidor. Si `OWN
 - **Asistente de visitas** (chat guiado, sin IA): guarda la visita en Supabase y ofrece mandar el resumen por WhatsApp.
 - **Panel** en `/admin` con dos usuarios (demo y dueño), sesión firmada con HMAC y límite de intentos fallidos. El usuario demo ve los datos de contacto enmascarados y no puede borrar las propiedades originales.
 - **Reseteo nocturno** en `/api/cron/reset-demo` (Vercel Cron, ver `vercel.json`): borra lo que cargó el demo y restaura las originales.
-- **Barra "Web modelo"** arriba de todo. Se oculta con `?captura=1` para sacar capturas.
 
 ## Scripts
 

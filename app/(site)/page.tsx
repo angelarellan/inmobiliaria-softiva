@@ -46,14 +46,11 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     maxPrice: Number.isFinite(maxPrice) && maxPrice > 0 ? maxPrice : null,
   };
 
-  // Con ?captura=1 se oculta la barra "Web modelo" (para sacar capturas).
-  const showDemoBar = param(params.captura) !== "1";
-
   return (
     <>
-      <Navbar showDemoBar={showDemoBar} />
+      <Navbar />
       <main>
-        <Hero neighborhoods={neighborhoods} withDemoBar={showDemoBar} />
+        <Hero neighborhoods={neighborhoods} />
         <FeaturedProperties
           key={JSON.stringify(initialFilters)}
           properties={properties}

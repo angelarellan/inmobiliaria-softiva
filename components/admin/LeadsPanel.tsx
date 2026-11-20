@@ -2,7 +2,14 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
-import { CalendarDays, Loader2, Lock, Mail, MessageCircle, Phone } from "lucide-react";
+import {
+  CalendarDays,
+  Loader2,
+  Lock,
+  Mail,
+  Phone,
+} from "lucide-react";
+import { WhatsAppIcon } from "../SocialIcons";
 import type { LeadStatus } from "@/lib/types";
 import { LEAD_STATUSES } from "@/lib/types";
 import { formatDateTime } from "@/lib/format";
@@ -146,7 +153,7 @@ function LeadCard({ lead }: { lead: LeadView }) {
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 rounded-full bg-[#25D366] px-4 py-2 text-xs font-semibold text-white transition-transform hover:scale-[1.02]"
           >
-            <MessageCircle size={15} />
+            <WhatsAppIcon size={15} />
             WhatsApp
           </a>
         ) : lead.masked ? (
@@ -155,7 +162,7 @@ function LeadCard({ lead }: { lead: LeadView }) {
             onClick={() => setDemoNotice((v) => !v)}
             className="flex items-center gap-1.5 rounded-full bg-[#25D366]/15 px-4 py-2 text-xs font-semibold text-[#128C4B]"
           >
-            <MessageCircle size={15} />
+            <WhatsAppIcon size={15} />
             WhatsApp
           </button>
         ) : null}

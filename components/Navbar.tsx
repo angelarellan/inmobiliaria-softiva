@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import DemoBar from "./DemoBar";
 
 const sections = [
   { id: "inicio", label: "Inicio" },
@@ -18,10 +17,9 @@ const sections = [
 interface Props {
   /** "overlay": transparente sobre el hero hasta que se scrollea (home). */
   variant?: "overlay" | "solid";
-  showDemoBar?: boolean;
 }
 
-export default function Navbar({ variant = "overlay", showDemoBar = true }: Props) {
+export default function Navbar({ variant = "overlay" }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const isHome = variant === "overlay";
@@ -38,7 +36,6 @@ export default function Navbar({ variant = "overlay", showDemoBar = true }: Prop
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      {showDemoBar && <DemoBar />}
       <div
         className={`transition-all duration-500 ${
           solid

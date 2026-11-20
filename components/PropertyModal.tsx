@@ -13,10 +13,10 @@ import {
   Ruler,
   MapPin,
   Car,
-  MessageCircle,
   CalendarCheck,
   ArrowRight,
 } from "lucide-react";
+import { WhatsAppIcon } from "./SocialIcons";
 import { Property } from "@/lib/types";
 import { formatPropertyPrice } from "@/lib/format";
 import { propertyPath } from "@/lib/site";
@@ -185,7 +185,7 @@ function ModalContent({
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
             >
-              <MessageCircle size={20} />
+              <WhatsAppIcon size={20} />
               Consultar por WhatsApp
             </a>
             {available ? (

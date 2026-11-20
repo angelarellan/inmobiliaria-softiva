@@ -7,7 +7,7 @@ export default function PropertyNotFound() {
   return (
     <>
       <Navbar variant="solid" />
-      <main className="flex min-h-[70vh] items-center justify-center bg-warm-white px-6 pb-24 pt-40">
+      <main className="flex min-h-[70vh] items-center justify-center bg-warm-white px-6 pb-24 pt-32">
         <div className="max-w-md text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
             Propiedad no disponible

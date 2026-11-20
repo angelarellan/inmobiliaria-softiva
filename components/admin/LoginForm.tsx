@@ -3,7 +3,14 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Lock, User, Loader2, AlertCircle, ArrowLeft, MessageCircle } from "lucide-react";
+import {
+  Lock,
+  User,
+  Loader2,
+  AlertCircle,
+  ArrowLeft,
+} from "lucide-react";
+import { WhatsAppIcon } from "../SocialIcons";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 export default function LoginForm() {
@@ -114,7 +121,7 @@ export default function LoginForm() {
           rel="noopener noreferrer"
           className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-warm-white px-4 py-3 text-center text-xs text-slate/70 ring-1 ring-slate/10 transition-colors hover:text-emerald"
         >
-          <MessageCircle size={16} className="shrink-0 text-[#25D366]" />
+          <WhatsAppIcon size={16} className="shrink-0 text-[#25D366]" />
           ¿Querés probar el panel? Pedinos el acceso demo por WhatsApp
         </a>
       </div>

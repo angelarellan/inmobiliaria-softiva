@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CalendarCheck, Check, Link2, MessageCircle, Share2 } from "lucide-react";
+import {
+  CalendarCheck,
+  Check,
+  Link2,
+  Share2,
+} from "lucide-react";
+import { WhatsAppIcon } from "../SocialIcons";
 import type { Property } from "@/lib/types";
 import { propertyUrl } from "@/lib/site";
 import { buildWhatsAppLink, buildWhatsAppShareLink } from "@/lib/whatsapp";
@@ -69,7 +75,7 @@ export default function PropertyActions({ property }: Props) {
         rel="noopener noreferrer"
         className="flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
       >
-        <MessageCircle size={20} />
+        <WhatsAppIcon size={20} />
         Consultar por WhatsApp
       </a>
 
@@ -116,7 +122,7 @@ export default function PropertyActions({ property }: Props) {
               onClick={() => setShareOpen(false)}
               className="flex items-center gap-3 border-t border-slate/10 px-4 py-3 text-sm text-slate hover:bg-warm-white"
             >
-              <MessageCircle size={18} className="text-[#25D366]" />
+              <WhatsAppIcon size={18} className="text-[#25D366]" />
               Compartir por WhatsApp
             </a>
           </div>

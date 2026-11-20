@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import PropertySearch from "./PropertySearch";
+import CountUp from "./CountUp";
 import { SearchFilters } from "@/lib/types";
 
 const defaultFilters: SearchFilters = {
@@ -15,11 +16,9 @@ const defaultFilters: SearchFilters = {
 
 interface Props {
   neighborhoods: string[];
-  /** Deja lugar para la barra "Web modelo" arriba del navbar. */
-  withDemoBar?: boolean;
 }
 
-export default function Hero({ neighborhoods, withDemoBar = true }: Props) {
+export default function Hero({ neighborhoods }: Props) {
   const router = useRouter();
   const [filters, setFilters] = useState<SearchFilters>(defaultFilters);
 
@@ -39,9 +38,7 @@ export default function Hero({ neighborhoods, withDemoBar = true }: Props) {
   return (
     <section
       id="inicio"
-      className={`relative flex min-h-screen items-center justify-center overflow-hidden bg-emerald pb-12 ${
-        withDemoBar ? "pt-36 sm:pt-32" : "pt-24"
-      }`}
+      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-emerald pt-24"
     >
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -105,15 +102,21 @@ export default function Hero({ neighborhoods, withDemoBar = true }: Props) {
           className="mt-14 grid grid-cols-3 gap-8 text-warm-white/90"
         >
           <div>
-            <p className="font-serif-display text-3xl text-gold">+10</p>
+            <p className="font-serif-display text-3xl text-gold">
+              <CountUp value="+10" />
+            </p>
             <p className="text-xs uppercase tracking-wide">Años de experiencia</p>
           </div>
           <div>
-            <p className="font-serif-display text-3xl text-gold">+500</p>
+            <p className="font-serif-display text-3xl text-gold">
+              <CountUp value="+500" />
+            </p>
             <p className="text-xs uppercase tracking-wide">Propiedades vendidas</p>
           </div>
           <div>
-            <p className="font-serif-display text-3xl text-gold">98%</p>
+            <p className="font-serif-display text-3xl text-gold">
+              <CountUp value="98%" />
+            </p>
             <p className="text-xs uppercase tracking-wide">Clientes satisfechos</p>
           </div>
         </motion.div>

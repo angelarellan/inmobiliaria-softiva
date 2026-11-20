@@ -168,13 +168,12 @@ function jsonLd(p: Property) {
   ];
 }
 
-export default async function PropertyPage({ params, searchParams }: Props) {
-  const [{ slug }, query] = await Promise.all([params, searchParams]);
+export default async function PropertyPage({ params }: Props) {
+  const { slug } = await params;
   const property = await getPropertyBySlug(slug);
   if (!property) notFound();
 
   const similar = pickSimilar(await getVisibleProperties(), property);
-  const showDemoBar = query.captura !== "1";
   const stamp = closedStampLabel(property.status);
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     [property.address, property.neighborhood, property.city].filter(Boolean).join(", ")
@@ -215,11 +214,9 @@ export default async function PropertyPage({ params, searchParams }: Props) {
           __html: JSON.stringify(jsonLd(property)).replace(/</g, "\\u003c"),
         }}
       />
-      <Navbar variant="solid" showDemoBar={showDemoBar} />
+      <Navbar variant="solid" />
 
-      <main
-        className={`bg-warm-white pb-24 ${showDemoBar ? "pt-36 sm:pt-32" : "pt-24"}`}
-      >
+      <main className="bg-warm-white pb-24 pt-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <nav aria-label="Ruta" className="mb-5 flex flex-wrap items-center gap-1 text-sm text-slate/60">
             <Link href="/" className="hover:text-emerald">

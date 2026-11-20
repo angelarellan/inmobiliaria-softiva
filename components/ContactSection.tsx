@@ -7,9 +7,9 @@ import {
   Loader2,
   Mail,
   MapPin,
-  MessageCircle,
   Phone,
 } from "lucide-react";
+import { WhatsAppIcon } from "./SocialIcons";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import Honeypot from "./Honeypot";
 
@@ -181,7 +181,7 @@ export default function ContactSection() {
                   rel="noopener noreferrer"
                   className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
                 >
-                  <MessageCircle size={18} />
+                  <WhatsAppIcon size={18} />
                   Seguir por WhatsApp
                 </a>
               )}
